@@ -30,7 +30,7 @@ class _NotesState extends State<Notes>
   List<Map<String, String>> get _note => NotesInherited.of(context).note;
 
   @override
-  void didChangeDependencies()
+  void didChangeDependencies() //Called when a dependency of this State object changes
   {
     if(widget.mode == NoteMode.edit)
       {
@@ -39,6 +39,7 @@ class _NotesState extends State<Notes>
       }
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context)
   {
@@ -79,11 +80,12 @@ class _NotesState extends State<Notes>
 
                       if(widget?.mode == NoteMode.create)
                       {
-                        _note.add({
-                          'title': title,
-                          'text':text
-                        });
+                          _note.add({
+                            'title': title,
+                            'text':text
+                          });
                       }
+
                       else if(widget?.mode == NoteMode.edit)
                       {
                         _note[widget.index] = {
@@ -93,12 +95,16 @@ class _NotesState extends State<Notes>
                       }
                       Navigator.pop(context);
                     }),
+
+                  NoteButton('Discard', Colors.blueGrey, () {
+                    Navigator.pop(context);
+                  }),
+
                   if (widget.mode == NoteMode.edit)
                     NoteButton('Delete', Colors.red.shade700, () {
                       _note.removeAt(widget.index);
                       Navigator.pop(context);
                     }),
-                  NoteButton('Discard', Colors.blueGrey, (){Navigator.pop(context);}),
                 ],
               ),
             ],
