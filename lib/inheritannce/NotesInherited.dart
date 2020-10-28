@@ -4,22 +4,22 @@ class NotesInherited extends InheritedWidget
 {
   final note = [
     {
-      'title':'Neruppu Da Nerungu Da',
-      'text': 'Paapom'
+      'title':'ABC',
+      'text': 'DEF'
     },
     {
-      'title':'Nerungu Na Posukkura',
-      'text': 'Kooto'
+      'title':'GHI',
+      'text': 'JKL'
     },
     {
-      'title':'Adikkara Azhikara Yenno',
-      'text': 'Mudiyuma Nadakkuma innu?'
+      'title':'MNO',
+      'text': 'PQR?'
     }
   ];
 
   NotesInherited(Widget child) : super(child: child); //what is this?
 
-  static NotesInherited of(BuildContext context) => context.dependOnInheritedWidgetOfExactType(aspect: NotesInherited);
+  static NotesInherited of(BuildContext context) => context.dependOnInheritedWidgetOfExactType();
   //what is this?
 
   @override
