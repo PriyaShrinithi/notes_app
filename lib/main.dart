@@ -11,7 +11,8 @@ class App extends StatelessWidget
   Widget build(BuildContext context)
   {
     return NotesInherited(
-       MaterialApp(//to maintain state
+       MaterialApp(
+         //to maintain state
           debugShowCheckedModeBanner: false,
           title: 'Notes',
           home: NoteList(),
