@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/inheritannce/NotesInherited.dart';
+import 'package:flutter_app/providers/NoteProvider.dart';
 import 'packageflutter_app/views/NoteList.dart';
 
 enum NoteMode
@@ -13,9 +14,9 @@ enum NoteMode
 class Notes extends StatefulWidget
 {
   final NoteMode mode;
-  final int index;
+  final Map<String, dynamic> _note;
 
-  Notes(this.mode, this.index);
+  Notes(this.mode, this._note);
 
   @override
   _NotesState createState() => _NotesState();
@@ -27,15 +28,15 @@ class _NotesState extends State<Notes>
   final titleControl = TextEditingController();
   final textControl = TextEditingController();
 
-  List<Map<String, String>> get _note => NotesInherited.of(context).note;
+  //List<Map<String, String>> get _note => NotesInherited.of(context).note;
 
   @override
   void didChangeDependencies() //Called when a dependency of this State object changes
   {
     if(widget.mode == NoteMode.edit)
       {
-        titleControl.text = _note[widget.index]['title'];
-        textControl.text = _note[widget.index]['text'];
+        titleControl.text = widget._note['title'];
+        textControl.text = widget._note['text'];
       }
     super.didChangeDependencies();
   }
@@ -80,7 +81,7 @@ class _NotesState extends State<Notes>
 
                       if(widget?.mode == NoteMode.create)
                       {
-                          _note.add({
+                          NoteProvider.insertNote({
                             'title': title,
                             'text':text
                           });
@@ -88,10 +89,11 @@ class _NotesState extends State<Notes>
 
                       else if(widget?.mode == NoteMode.edit)
                       {
-                        _note[widget.index] = {
+                        NoteProvider.editNote({
+                          'id': widget._note['id'],
                           'title': title,
                           'text': text
-                        };
+                        });
                       }
                       Navigator.pop(context);
                     }),
@@ -101,8 +103,8 @@ class _NotesState extends State<Notes>
                   }),
 
                   if (widget.mode == NoteMode.edit)
-                    NoteButton('Delete', Colors.red.shade700, () {
-                      _note.removeAt(widget.index);
+                    NoteButton('Delete', Colors.red.shade700, () async {
+                     await NoteProvider.deleteNote(widget._note['id']);
                       Navigator.pop(context);
                     }),
                 ],

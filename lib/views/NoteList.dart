@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/inheritannce/NotesInherited.dart';
+import 'package:flutter_app/providers/NoteProvider.dart';
 import 'package:flutter_app/views/Notes.dart';
 
 class NoteList extends StatefulWidget
@@ -12,7 +13,7 @@ class NoteList extends StatefulWidget
 
 class _NoteListState extends State<NoteList> {
 
-  List<Map<String, String>> get _note => NotesInherited.of(context).note;
+  //List<Map<String, String>> get _note => NotesInherited.of(context).note;
 
   @override
   Widget build(BuildContext context) {
@@ -21,35 +22,43 @@ class _NoteListState extends State<NoteList> {
         backgroundColor: Colors.purple,
         title: Text('Notes'),
       ),
-      body: ListView.builder(
-        //to display widgets dynamically
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Notes(NoteMode.edit, index))
-            );
-              setState(() {});
-              print(_note);
-            },
-            child: new Card(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 8.0, right: 8.0),
-                child: Column( //column is a multi child widget: allows creating many widgets
-                  // to align vertically: use crossaxisalignment
-                  crossAxisAlignment: CrossAxisAlignment.center, // start brings the text to the left most corner
-                  children: <Widget>[
-                    NoteTitle(_note[index]['title']),
-                    Container(height: 12.0,),
-                    NoteText(_note[index]['text'])
-                  ],
+      body: FutureBuilder(
+        future: NoteProvider.getNoteList(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            final note = snapshot.data;
+          return ListView.builder(
+          //to display widgets dynamically
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Notes(NoteMode.edit, note[index]))
+              );
+                setState(() {});
+              },
+              child: new Card(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 8.0, right: 8.0),
+                  child: Column( //column is a multi child widget: allows creating many widgets
+                    // to align vertically: use crossaxisalignment
+                    crossAxisAlignment: CrossAxisAlignment.center, // start brings the text to the left most corner
+                    children: <Widget>[
+                      NoteTitle(note[index]['title']),
+                      Container(height: 12.0,),
+                      NoteText(note[index]['text'])
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-        itemCount: _note.length,
+            );
+          },
+          itemCount: note.length,
+        );
+        }
+          return Center(child: CircularProgressIndicator());
+      }
       ),
 
       floatingActionButton: FloatingActionButton(
@@ -59,8 +68,6 @@ class _NoteListState extends State<NoteList> {
             MaterialPageRoute(builder: (context) => Notes(NoteMode.create, null),),
           );
           setState(() {});
-          print(_note.length);
-          print(_note);
         },
         child: Icon(Icons.create),
         backgroundColor: Colors.redAccent,
