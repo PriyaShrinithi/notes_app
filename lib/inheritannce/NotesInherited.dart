@@ -2,20 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class NotesInherited extends InheritedWidget
 {
-  final note = [
-    {
-      'title':'ABC',
-      'text': 'DEF'
-    },
-    {
-      'title':'GHI',
-      'text': 'JKL'
-    },
-    {
-      'title':'MNO',
-      'text': 'PQR?'
-    }
-  ];
+  final _note = [];
 
   NotesInherited(Widget child) : super(child: child); //what is this?
 
@@ -23,6 +10,6 @@ class NotesInherited extends InheritedWidget
   //what is this?
 
   @override
-  bool updateShouldNotify(NotesInherited oldWidget) => oldWidget.note != note;
+  bool updateShouldNotify(NotesInherited oldWidget) => oldWidget._note != _note;
   //notiies true only if old and new notes are different
 }
