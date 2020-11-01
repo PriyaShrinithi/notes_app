@@ -65,12 +65,14 @@ class _NotesState extends State<Notes>
               ),
               Container(height: 8.0,),
               TextField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 controller: textControl,
-                decoration: InputDecoration(
-                  hintText: 'Note Text...',
+                decoration: InputDecoration(hintText: 'Note Text...',
+
                 ),
               ),
-              Container(height: 112.0,),
+              Container(height: 80.0,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
