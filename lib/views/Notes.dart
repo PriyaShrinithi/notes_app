@@ -58,6 +58,8 @@ class _NotesState extends State<Notes>
           child: Column( //column is a multi child widget: allows creating many widgets
             children: <Widget>[
               TextField(
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
                 controller: titleControl,
                 decoration: InputDecoration(
                   hintText: 'Note Title...',
