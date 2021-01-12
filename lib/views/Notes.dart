@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/inheritannce/NotesInherited.dart';
 import 'package:flutter_app/providers/NoteProvider.dart';
-import 'packageflutter_app/views/NoteList.dart';
 
 enum NoteMode
 {
@@ -53,69 +51,70 @@ class _NotesState extends State<Notes>
         backgroundColor: Colors.purple,
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-          child: Column( //column is a multi child widget: allows creating many widgets
-            children: <Widget>[
-              TextField(
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                controller: titleControl,
-                decoration: InputDecoration(
-                  hintText: 'Note Title...',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+            child: Column( //column is a multi child widget: allows creating many widgets
+              children: <Widget>[
+                TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 3,
+                  controller: titleControl,
+                  decoration: InputDecoration(
+                    hintText: 'Note Title...',
+                  ),
                 ),
-              ),
-              Container(height: 8.0,),
-              TextField(
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                controller: textControl,
-                decoration: InputDecoration(hintText: 'Note Text...',
-
+                Container(height: 8.0,),
+                TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  controller: textControl,
+                  decoration: InputDecoration(hintText: 'Note Text...',
+                  ),
                 ),
-              ),
-              Container(height: 80.0,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  NoteButton('Save', Colors.indigo, (){
+                Container(height: 80.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NoteButton('Save', Colors.indigo, (){
 
-                     final title = titleControl.text;
-                     final text = textControl.text;
+                       final title = titleControl.text;
+                       final text = textControl.text;
 
-                      if(widget?.mode == NoteMode.create)
-                      {
-                          NoteProvider.insertNote({
+                        if(widget?.mode == NoteMode.create)
+                        {
+                            NoteProvider.insertNote({
+                              'title': title,
+                              'text':text
+                            });
+                        }
+
+                        else if(widget?.mode == NoteMode.edit)
+                        {
+                          NoteProvider.editNote({
+                            'id': widget._note['id'],
                             'title': title,
-                            'text':text
+                            'text': text
                           });
-                      }
+                        }
+                        Navigator.pop(context);
+                      }),
 
-                      else if(widget?.mode == NoteMode.edit)
-                      {
-                        NoteProvider.editNote({
-                          'id': widget._note['id'],
-                          'title': title,
-                          'text': text
-                        });
-                      }
+                    NoteButton('Discard', Colors.blueGrey, () {
                       Navigator.pop(context);
                     }),
 
-                  NoteButton('Discard', Colors.blueGrey, () {
-                    Navigator.pop(context);
-                  }),
-
-                  if (widget.mode == NoteMode.edit)
-                    NoteButton('Delete', Colors.red.shade700, () async {
-                     await NoteProvider.deleteNote(widget._note['id']);
-                      Navigator.pop(context);
-                    }),
-                ],
-              ),
-            ],
+                    if (widget.mode == NoteMode.edit)
+                      NoteButton('Delete', Colors.red.shade700, () async {
+                       await NoteProvider.deleteNote(widget._note['id']);
+                        Navigator.pop(context);
+                      }),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
+      ),
       );
   }
 }
