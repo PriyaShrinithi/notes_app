@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/inheritannce/NotesInherited.dart';
 import 'package:flutter_app/views/NoteList.dart';
-import 'package:flutter_app/views/Notes.dart';
 
 void main() => runApp(App());
 
